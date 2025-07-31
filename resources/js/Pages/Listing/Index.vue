@@ -1,5 +1,5 @@
 <template>
-    <div v-for="listing in listings" :key="listing.id">
+    <div v-for="listing in Listing" :key="listing.id">
         <Link :href="`/listing/${listing.id}`">
             <ListingAddress :listing="listing" />
         </Link>
@@ -7,9 +7,9 @@
 </template>
 
 <script setup>
-import { Link } from "@inertiajs/vue3";
 import ListingAddress from "@/Components/ListingAddress.vue";
+import { Link } from "@inertiajs/vue3";
 defineProps({
-    listing: Array,
+    Listing: Array,
 });
 </script>
