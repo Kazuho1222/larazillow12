@@ -18,7 +18,7 @@
 
             <div>
                 <label>City</label>
-                <input type="text" v-model.number="form.baths" />
+                <input type="text" v-model.number="form.city" />
             </div>
 
             <div>
@@ -57,6 +57,7 @@ const form = useForm({
     area: 0,
     city: null,
     street: null,
+    code: null,
     street_nr: null,
     city: null,
     price: 0,
