@@ -16,13 +16,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        // テストユーザー用のパスワードを設定
-        UserFactory::setPassword('password');
-
-        User::factory()->create([
+        // テストユーザーを作成（パスワードは'password'）
+        User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'password' => bcrypt('password'),
+            'email_verified_at' => now(),
         ]);
+
         \App\Models\Listing::factory(20)->create();
     }
 }
