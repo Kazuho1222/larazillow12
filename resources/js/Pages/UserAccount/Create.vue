@@ -66,5 +66,5 @@ const form = useForm({
     password: null,
     password_cofirmation: null,
 });
-const register = () => form.post("");
+const register = () => form.post(route("user-account.store"));
 </script>
