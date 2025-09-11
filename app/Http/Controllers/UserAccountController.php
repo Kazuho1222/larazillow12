@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash as FacadesHash;
+use Illuminate\Support\Facades\Hash;
 
 class UserAccountController extends Controller
 {
@@ -22,8 +21,7 @@ class UserAccountController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed'
         ]));
-        $user->password = FacadesHash::make($user->password);
-        $user->save();
+        // $user->save();
         Auth::login($user);
 
         return redirect()->route('listing.index')
