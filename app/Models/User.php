@@ -59,7 +59,7 @@ class User extends Authenticatable
         );
     }
 
-    public function listing(): HasMany
+    public function listings(): HasMany
     {
         return $this->hasMany(
             \App\Models\Listing::class,
