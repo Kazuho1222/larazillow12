@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Listing;
+use Gate;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ListingController extends Controller
 {
@@ -12,7 +14,11 @@ class ListingController extends Controller
      */
     public function index()
     {
-        return inertia(
+        Gate::authorize(
+            'viewAny',
+            Listing::class
+        );
+        return Inertia::render(
             'Listing/Index',
             [
                 'listings' => Listing::all()
@@ -54,7 +60,11 @@ class ListingController extends Controller
      */
     public function show(Listing $listing)
     {
-        return inertia(
+        Gate::authorize(
+            'view',
+            $listing
+        );
+        return Inertia::render(
             'Listing/Show',
             [
                 'listing' => $listing

@@ -64,14 +64,12 @@
 </template>
 
 <script setup>
-import { useForm, Link } from "@inertiajs/vue3";
-import { handleError } from "vue";
-
+import { Link, useForm } from "@inertiajs/vue3";
 const form = useForm({
     name: null,
     email: null,
     password: null,
-    password_cofirmation: null,
+    password_confirmation: null,
 });
 const register = () => form.post(route("user-account.store"));
 </script>
