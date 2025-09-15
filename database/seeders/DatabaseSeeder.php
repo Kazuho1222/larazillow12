@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Test User',
                 'password' => bcrypt('password'),
                 'email_verified_at' => now(),
+                'is_admin' => true
             ]
         );
 
@@ -34,8 +35,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User 3',
             'email' => 'test3@example.com'
         ]);
-        \App\Models\Listing::factory(20)->create([
+        \App\Models\Listing::factory(10)->create([
             'by_user_id' => 1
+        ]);
+        \App\Models\Listing::factory(10)->create([
+            'by_user_id' => 2
         ]);
     }
 }
