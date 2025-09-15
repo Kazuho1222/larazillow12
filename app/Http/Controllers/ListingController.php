@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Listing;
-use Gate;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,14 +13,11 @@ class ListingController extends Controller
      */
     public function index()
     {
-        Gate::authorize(
-            'viewAny',
-            Listing::class
-        );
         return Inertia::render(
             'Listing/Index',
             [
-                'listings' => Listing::all()
+                'listings' => Listing::orderByDesc('created_at')
+                    ->paginate(10)
             ]
         );
     }
@@ -60,10 +56,6 @@ class ListingController extends Controller
      */
     public function show(Listing $listing)
     {
-        Gate::authorize(
-            'view',
-            $listing
-        );
         return Inertia::render(
             'Listing/Show',
             [
