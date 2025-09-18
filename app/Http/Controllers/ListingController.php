@@ -25,7 +25,7 @@ class ListingController extends Controller
             'Listing/Index',
             [
                 'filters' => $filters,
-                'listings' => Listing::orderByDesc('created_at')
+                'listings' => Listing::mostRecent()
                     ->when(
                         $filters['priceForm'] ?? false,
                         fn($query, $value) => $query->where('price', '>=', $value)
