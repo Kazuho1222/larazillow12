@@ -21,6 +21,7 @@ import Listing from "@/Pages/Listing/Index/Components/Listing.vue";
 import Filters from "./Index/Components/Filters.vue";
 
 defineProps({
+    listings: Object,
     filters: Object,
 });
 </script>

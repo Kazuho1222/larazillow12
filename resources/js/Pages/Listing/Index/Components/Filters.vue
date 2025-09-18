@@ -31,13 +31,13 @@
 
             <div class="flex flex-nowrap items-center">
                 <input
-                    v-model="filterForm.areaForm"
+                    v-model.number="filterForm.areaForm"
                     type="text"
                     placeholder="Area from"
                     class="input-filter-l w-28"
                 />
                 <input
-                    v-model="filterForm.areaTo"
+                    v-model.number="filterForm.areaTo"
                     type="text"
                     placeholder="Area to"
                     class="input-filter-r w-28"
