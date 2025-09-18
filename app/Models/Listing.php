@@ -25,4 +25,33 @@ class Listing extends Model
     {
         return $query->orderByDesc('created_at');
     }
+
+    # [Scope]
+    protected function scopeFilter(Builder $query, array $filters): void
+    {
+        $query->when(
+            $filters['priceForm'] ?? false,
+            fn($query, $value) => $query->where('price', '>=', $value)
+        )
+            ->when(
+                $filters['priceTo'] ?? false,
+                fn($query, $value) => $query->where('price', '<=', $value)
+            )
+            ->when(
+                $filters['beds'] ?? false,
+                fn($query, $value) => $query->where('beds', (int)$value < 6 ? '=' : '>=', $value)
+            )
+            ->when(
+                $filters['baths'] ?? false,
+                fn($query, $value) => $query->where('baths', (int)$value < 6 ? '=' : '>=', $value)
+            )
+            ->when(
+                $filters['areaForm'] ?? false,
+                fn($query, $value) => $query->where('area', '>=', $value)
+            )
+            ->when(
+                $filters['areaTo'] ?? false,
+                fn($query, $value) => $query->where('area', '<=', $value)
+            );
+    }
 }
