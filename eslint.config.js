@@ -28,6 +28,7 @@ export default [
             indent: ["error", 2],
             quotes: ["warn", "single"],
             semi: ["warn", "never"],
+            "object-curly-spacing": ["error", "always"],
             "no-unused-vars": [
                 "error",
                 { vars: "all", args: "after-used", ignoreRestSiblings: true },
