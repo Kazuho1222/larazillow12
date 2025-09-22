@@ -10,18 +10,49 @@
                 />
                 <label for="deleted">Deleted</label>
             </div>
+
+            <div>
+                <select v-model="filterForm.by" class="input-filter-l w-24">
+                    <option value="created_at">Added</option>
+                    <option value="price">Price</option>
+                </select>
+                <select v-model="filterForm.order" class="input-filter-r w-32">
+                    <option
+                        v-for="option in sortOptions"
+                        :value="option.value"
+                        :key="option.value"
+                    >
+                        {{ option.label }}
+                    </option>
+                </select>
+            </div>
         </div>
     </form>
 </template>
 
 <script setup>
-import { reactive, watch } from "vue";
+import { computed, reactive, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import { debounce } from "lodash";
 
 const filterForm = reactive({
     deleted: false,
+    by: "created_at",
+    order: "desc",
 });
+
+const sortLabels = {
+    created_at: [
+        { label: "Latest", value: "desc" },
+        { label: "Oldest", value: "asc" },
+    ],
+    price: [
+        { label: "Pricey", value: "desc" },
+        { label: "Cheapest", value: "asc" },
+    ],
+};
+
+const sortOptions = computed(() => sortLabels[filterForm.by]);
 
 watch(
     filterForm,
