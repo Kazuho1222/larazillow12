@@ -1,5 +1,6 @@
 <template>
     <form
+        enctype="multipart/form-data"
         method="post"
         :action="
             route('realtor.listing.image.store', {
@@ -7,7 +8,7 @@
             })
         "
     >
-        <input type="file" multiple name="files" />
+        <input type="file" multiple name="images[]" />
         <button type="submit">Send</button>
     </form>
 </template>
