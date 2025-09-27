@@ -21,6 +21,7 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
-        "@inertiajs/vue3": "^2.0.17"
+        "@inertiajs/vue3": "^2.0.17",
+        "nprogress": "^0.2.0"
     }
 }
