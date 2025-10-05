@@ -35,7 +35,13 @@ class Listing extends Model
         );
     }
 
-
+    public function offers(): HasMany
+    {
+        return $this->hasMany(
+            Offer::class,
+            'listing_id'
+        );
+    }
 
     public function scopeMostRecent(Builder $query): Builder
     {
