@@ -16,13 +16,13 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreignIdFor(
-                \App\Models\Listing::class
-            )->constrained(
-                'listings',
-            );
+                \App\Models\Listing::class,
+                'listing_id'
+            )->constrained('listings');
 
             $table->foreignIdFor(
-                \App\Models\User::class
+                \App\Models\User::class,
+                'bidder_id'
             )->constrained(
                 'users',
             );

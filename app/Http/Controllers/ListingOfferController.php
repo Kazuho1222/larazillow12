@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\offer;
+use App\Models\Offer;
 use App\Models\Listing;
 use Illuminate\Http\Request;
 
@@ -11,7 +11,7 @@ class ListingOfferController extends Controller
     public function store(Request $request, Listing $listing)
     {
         $listing->offers()->save(
-            offer::make($request->validate([
+            Offer::make($request->validate([
                 'amount' => 'required|integer|min:1|max:20000000',
             ]))->bidder()->associate($request->user()),
         );
