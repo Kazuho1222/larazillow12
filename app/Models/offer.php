@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 
-class offer extends Model
+class Offer extends Model
 {
     use HasFactory;
 
@@ -27,5 +27,10 @@ class offer extends Model
     public function scopeByMe(Builder $query): Builder
     {
         return $query->where('bidder_id', Auth::user()?->id);
+    }
+
+    public function scopExcept(Builder $query, Offer $offer): Builder
+    {
+        return $query->where('id', '!=', $offer->id);
     }
 }
