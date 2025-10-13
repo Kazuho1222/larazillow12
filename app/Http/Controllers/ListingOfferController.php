@@ -10,6 +10,8 @@ class ListingOfferController extends Controller
 {
     public function store(Request $request, Listing $listing)
     {
+        $this->authorize('view', $listing);
+
         $listing->offers()->save(
             Offer::make($request->validate([
                 'amount' => 'required|integer|min:1|max:20000000',
