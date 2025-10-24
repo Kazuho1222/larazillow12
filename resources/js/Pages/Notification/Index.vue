@@ -44,7 +44,6 @@
     >
         <Pagination :links="notifications.links" />
     </section>
-    >
 </template>
 
 <script setup>
