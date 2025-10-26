@@ -9,7 +9,7 @@ use App\Notifications\OfferMade;
 
 class ListingOfferController extends Controller
 {
-    public function store(Request $request, Listing $listing)
+    public function store(Listing $listing, Request $request)
     {
         $this->authorize('view', $listing);
 
