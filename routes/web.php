@@ -1,18 +1,19 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\ListingOfferController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\NotificationSeenController;
-use App\Http\Controllers\RealtorListingAcceptOfferController;
 use App\Http\Controllers\RealtorListingController;
-use App\Http\Controllers\RealtorListingImageController;
-use App\Http\Controllers\UserAccountController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationSeenController;
 use Illuminate\Notifications\Events\NotificationSent;
+use App\Http\Controllers\RealtorListingImageController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\RealtorListingAcceptOfferController;
 
 Route::get(
     '/',
@@ -54,7 +55,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sedEmailVerificationNotification();
+    $request->user()->sendEmailVerificationNotification();
 
     return back()->with('success', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
