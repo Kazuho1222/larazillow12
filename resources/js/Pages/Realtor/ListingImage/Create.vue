@@ -78,27 +78,26 @@ const form = useForm({
 });
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB per file
 const MAX_TOTAL_SIZE_BYTES = 8 * 1024 * 1024; // 8 MB total guard
-const imageErrors = computed(() =>
-    Object.values(form.errors).flatMap((err) => err.split("\n").filter(Boolean))
+// Option 1: Use newlines consistently
+const imageErrors = computed(
+    () =>
+        Object.values(form.errors).flatMap((err) =>
+            err.split("\n").filter(Boolean)
+        ),
+    {
+        onSuccess: () => {
+            form.reset("images");
+            NProgress.done();
+        },
+        onError: () => {
+            NProgress.done();
+        },
+        onFinish: () => {
+            NProgress.done();
+        },
+    }
 );
-const canUpload = computed(() => form.images.length);
-const upload = () => {
-    form.post(
-        route("realtor.listing.image.store", { listing: props.listing.id }),
-        {
-            onSuccess: () => {
-                form.reset("images");
-                NProgress.done();
-            },
-            onError: () => {
-                NProgress.done();
-            },
-            onFinish: () => {
-                NProgress.done();
-            },
-        }
-    );
-};
+
 const addFiles = (event) => {
     // reset previous image errors
     form.clearErrors("images");
