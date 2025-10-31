@@ -7,6 +7,7 @@
                     class="border rounded-md file:px-4 file:py-2 border-gray-200 dark:border-gray-700 file:text-gray-700 file:dark:text-gray-400 file:border-0 file:bg-gray-100 file:dark:bg-gray-800 file:font-medium file:hover:bg-gray-200 file:dark:hover:bg-gray-700 file:hover:cursor-pointer file:mr-4"
                     multiple
                     type="file"
+                    accept="image/*"
                     @input="addFiles"
                 />
                 <button
@@ -71,19 +72,63 @@ router.on("progress", (event) => {
 const form = useForm({
     images: [],
 });
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB per file
+const MAX_TOTAL_SIZE_BYTES = 8 * 1024 * 1024; // 8 MB total guard
 const imageErrors = computed(() => Object.values(form.errors));
 const canUpload = computed(() => form.images.length);
 const upload = () => {
+    // Block submit if there are errors or no files
+    if (!form.images.length) {
+        form.setError("images", "Please select at least one image.");
+        return;
+    }
+
     form.post(
         route("realtor.listing.image.store", { listing: props.listing.id }),
         {
-            onSuccess: () => form.reset("images"),
+            onSuccess: () => {
+                form.reset("images");
+                NProgress.done();
+            },
+            onError: () => {
+                NProgress.done();
+            },
+            onFinish: () => {
+                NProgress.done();
+            },
         }
     );
 };
 const addFiles = (event) => {
+    // reset previous image errors
+    form.clearErrors("images");
+
+    let total = form.images.reduce((acc, f) => acc + (f?.size || 0), 0);
+
     for (const image of event.target.files) {
+        if (total + image.size > MAX_TOTAL_SIZE_BYTES) {
+            form.setError(
+                "images",
+                `Total size must be ${Math.floor(
+                    MAX_TOTAL_SIZE_BYTES / (1024 * 1024)
+                )} MB or smaller.`
+            );
+            continue;
+        }
+        if (image.size > MAX_FILE_SIZE_BYTES) {
+            form.setError("images", "Each file must be 5 MB or smaller.");
+            continue;
+        }
+        if (!image.type.startsWith("image/")) {
+            form.setError("images", "Only image files are allowed.");
+            continue;
+        }
         form.images.push(image);
+        total += image.size;
+    }
+    // if none passed validation, clear the input selection
+    if (!form.images.length) {
+        event.target.value = "";
     }
 };
 const reset = () => form.reset("images");

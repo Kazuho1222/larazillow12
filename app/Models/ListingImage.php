@@ -23,6 +23,6 @@ class ListingImage extends Model
     // getRealSrcAttribute -> real_src
     public function getSrcAttribute()
     {
-        return asset('storage/{$this->filename}');
+        return asset('storage/' . $this->filename);
     }
 }

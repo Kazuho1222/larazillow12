@@ -35,7 +35,11 @@ class RealtorListingImageController extends Controller
             }
         };
 
-        return redirect()->back()->with('success', 'Image uploaded!');
+        $listing->load(['images']);
+
+        return redirect()->route('realtor.listing.image.create', [
+            'listing' => $listing->id
+        ])->with('success', 'Image uploaded!');
     }
 
     public function destroy($listing, ListingImage $image)

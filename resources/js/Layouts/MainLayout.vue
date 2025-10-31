@@ -60,6 +60,12 @@
         >
             {{ flashSuccess }}
         </div>
+        <div
+            v-if="flashError"
+            class="mb-4 border rounded-md shadow-sm border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900 p-2 text-red-800 dark:text-red-200"
+        >
+            {{ flashError }}
+        </div>
         <slot>Default</slot>
     </main>
 </template>
@@ -70,6 +76,7 @@ import { computed } from "vue";
 
 const page = usePage();
 const flashSuccess = computed(() => page.props.flash.success);
+const flashError = computed(() => page.props.flash.error);
 const user = computed(() => page.props.user);
 
 const notificationCount = computed(() =>
