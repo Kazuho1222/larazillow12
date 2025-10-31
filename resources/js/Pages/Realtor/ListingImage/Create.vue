@@ -77,12 +77,6 @@ const MAX_TOTAL_SIZE_BYTES = 8 * 1024 * 1024; // 8 MB total guard
 const imageErrors = computed(() => Object.values(form.errors));
 const canUpload = computed(() => form.images.length);
 const upload = () => {
-    // Block submit if there are errors or no files
-    if (!form.images.length) {
-        form.setError("images", "Please select at least one image.");
-        return;
-    }
-
     form.post(
         route("realtor.listing.image.store", { listing: props.listing.id }),
         {
