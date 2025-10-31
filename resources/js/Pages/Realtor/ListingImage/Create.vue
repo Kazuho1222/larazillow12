@@ -110,11 +110,11 @@ const addFiles = (event) => {
             continue;
         }
         if (image.size > MAX_FILE_SIZE_BYTES) {
-            form.push("Each file must be 5 MB or smaller.");
+            errors.push("Each file must be 5 MB or smaller.");
             continue;
         }
         if (!image.type.startsWith("image/")) {
-            form.push("Only image files are allowed.");
+            errors.push("Only image files are allowed.");
             continue;
         }
         form.images.push(image);
@@ -122,7 +122,7 @@ const addFiles = (event) => {
     }
     // Set all accumulated errors at once
     if (errors.length) {
-        form.setError("images", [...new Set(errors).join(" ")]);
+        form.setError("images", [...new Set(errors)].join(" "));
     }
     // if none passed validation, clear the input selection
     if (!form.images.length) {
