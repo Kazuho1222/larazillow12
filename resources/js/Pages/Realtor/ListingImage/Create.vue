@@ -98,11 +98,11 @@ const addFiles = (event) => {
     form.clearErrors("images");
 
     let total = form.images.reduce((acc, f) => acc + (f?.size || 0), 0);
+    const errors = [];
 
     for (const image of event.target.files) {
         if (total + image.size > MAX_TOTAL_SIZE_BYTES) {
-            form.setError(
-                "images",
+            errors.push(
                 `Total size must be ${Math.floor(
                     MAX_TOTAL_SIZE_BYTES / (1024 * 1024)
                 )} MB or smaller.`
@@ -110,15 +110,19 @@ const addFiles = (event) => {
             continue;
         }
         if (image.size > MAX_FILE_SIZE_BYTES) {
-            form.setError("images", "Each file must be 5 MB or smaller.");
+            form.push("Each file must be 5 MB or smaller.");
             continue;
         }
         if (!image.type.startsWith("image/")) {
-            form.setError("images", "Only image files are allowed.");
+            form.push("Only image files are allowed.");
             continue;
         }
         form.images.push(image);
         total += image.size;
+    }
+    // Set all accumulated errors at once
+    if (errors.length) {
+        form.setError("images", [...new Set(errors).join(" ")]);
     }
     // if none passed validation, clear the input selection
     if (!form.images.length) {
