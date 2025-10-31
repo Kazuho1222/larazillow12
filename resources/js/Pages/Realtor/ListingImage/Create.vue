@@ -93,12 +93,6 @@ const upload = () => {
                 form.reset("images");
                 if (fileInput.value) fileInput.value.value = "";
             },
-            onError: () => {
-                NProgress.done();
-            },
-            onFinish: () => {
-                NProgress.done();
-            },
         }
     );
 };
