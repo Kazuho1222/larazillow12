@@ -4,7 +4,8 @@
         <form @submit.prevent="upload">
             <section class="flex items-center gap-2 my-4">
                 <input
-                    class="border rounded-md file:px-4 file:py-2 border-gray-200 dark:border-gray-700 file:text-gray-700 file:dark:text-gray-400 file:border-0 file:bg-gray-100 file:dark:bg-gray-800 file:font-medium file:hover:bg-gray-200 file:dark:hover:bg-gray-700 file:hover:cursor-pointer file:mr-4"
+                    ref="fileInput"
+                    class="border rounded-md file:px-4 file:py-2 border-gray-200 dark:border-gray-700 file:text-gray-700 file:dark:text-gray-400 file:border-0 file:bg-gray-100 file:dark:bg-gray-800 file:font-medium file:hover:bg-gray-200 file:dark:hover:bg-gray-700 file:hover:cursor-pointer file:mr-4 cursor-pointer"
                     multiple
                     type="file"
                     accept="image/*"
@@ -13,7 +14,7 @@
                 <button
                     type="submit"
                     class="btn-outline disabled:opacity-25 disabled:cursor-not-allowed"
-                    :disabled="!canUpload"
+                    :disabled="!canUpload || form.processing"
                 >
                     Upload
                 </button>
@@ -64,40 +65,43 @@
 import Box from "@/Components/UI/Box.vue";
 import { Link, router, useForm } from "@inertiajs/vue3";
 import NProgress from "nprogress";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({ listing: Object });
-router.on("progress", (event) => {
-    if (event.detail.progress.percentage) {
-        NProgress.set((event.detail.progress.percentage / 100) * 0.9);
-    }
+router.on("start", () => {
+    NProgress.start();
+});
+router.on("finish", () => {
+    NProgress.done();
 });
 
 const form = useForm({
     images: [],
 });
+const fileInput = ref(null);
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB per file
 const MAX_TOTAL_SIZE_BYTES = 8 * 1024 * 1024; // 8 MB total guard
-// Option 1: Use newlines consistently
-const imageErrors = computed(
-    () =>
-        Object.values(form.errors).flatMap((err) =>
-            err.split("\n").filter(Boolean)
-        ),
-    {
-        onSuccess: () => {
-            form.reset("images");
-            NProgress.done();
-        },
-        onError: () => {
-            NProgress.done();
-        },
-        onFinish: () => {
-            NProgress.done();
-        },
-    }
+const imageErrors = computed(() =>
+    Object.values(form.errors).flatMap((err) => err.split("\n").filter(Boolean))
 );
-
+const canUpload = computed(() => form.images.length);
+const upload = () => {
+    form.post(
+        route("realtor.listing.image.store", { listing: props.listing.id }),
+        {
+            onSuccess: () => {
+                form.reset("images");
+                if (fileInput.value) fileInput.value.value = "";
+            },
+            onError: () => {
+                NProgress.done();
+            },
+            onFinish: () => {
+                NProgress.done();
+            },
+        }
+    );
+};
 const addFiles = (event) => {
     // reset previous image errors
     form.clearErrors("images");
