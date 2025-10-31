@@ -79,12 +79,7 @@ const form = useForm({
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB per file
 const MAX_TOTAL_SIZE_BYTES = 8 * 1024 * 1024; // 8 MB total guard
 const imageErrors = computed(() =>
-    Object.values(form.errors).flatMap((err) =>
-        err
-            .split(". ")
-            .filter(Boolean)
-            .map((e) => (e.endsWith(".") ? e : e + "."))
-    )
+    Object.values(form.errors).flatMap((err) => err.split("\n").filter(Boolean))
 );
 const canUpload = computed(() => form.images.length);
 const upload = () => {
