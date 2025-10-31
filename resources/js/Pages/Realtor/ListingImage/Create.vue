@@ -22,7 +22,11 @@
                 </button>
             </section>
             <div v-if="imageErrors.length" class="input-error">
-                <div v-for="(error, index) in imageErrors" :key="index">
+                <div
+                    v-for="(error, index) in imageErrors"
+                    :key="index"
+                    class="whitespace-pre-line"
+                >
                     {{ error }}
                 </div>
             </div>
@@ -74,7 +78,14 @@ const form = useForm({
 });
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB per file
 const MAX_TOTAL_SIZE_BYTES = 8 * 1024 * 1024; // 8 MB total guard
-const imageErrors = computed(() => Object.values(form.errors));
+const imageErrors = computed(() =>
+    Object.values(form.errors).flatMap((err) =>
+        err
+            .split(". ")
+            .filter(Boolean)
+            .map((e) => (e.endsWith(".") ? e : e + "."))
+    )
+);
 const canUpload = computed(() => form.images.length);
 const upload = () => {
     form.post(
@@ -122,7 +133,7 @@ const addFiles = (event) => {
     }
     // Set all accumulated errors at once
     if (errors.length) {
-        form.setError("images", [...new Set(errors)].join(" "));
+        form.setError("images", [...new Set(errors)].join("\n"));
     }
     // if none passed validation, clear the input selection
     if (!form.images.length) {
